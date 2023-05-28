@@ -1,0 +1,85 @@
+@extends('layouts.admin')
+@section('content')
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>{{__('public.Slider')}}</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">{{__('public.Home')}}</a></li>
+                        <li class="breadcrumb-item active">{{__('public.Slider')}}</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            @if(count($errors)>0)
+                            <div class='alert alert-danger'>
+                                <ul>
+                                    @foreach($errors->all() as $error)
+                                    <li>{{$error}}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            @endif
+                            @if($message=Session::get('success'))
+                            <div class="alert alert-success">
+                                <p>{{ $message }}</p>
+                            </div>
+                            @endif<br>
+                            <div class="tab-pane" id="settings">
+                                <form method="post" action="{{route('slider-create-action')}}" enctype="multipart/form-data" class="form-horizontal">
+                                    @csrf
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-2 col-form-label">{{__('public.Title')}}<span style="color: red;">*</span></label>
+                                        <div class="col-sm-10">
+                                            <input type="text" name="title" class="form-control" placeholder="{{__('public.Title')}}" value="{{old('title')}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-2 col-form-label">{{__('public.Sub_Title')}}</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" name="sub_title" class="form-control" placeholder="{{__('public.Sub_Title')}}" value="{{old('sub_title')}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-2 col-form-label">{{__('public.Image')}}<span style="color: red;">*</span></label>
+                                        <div class="col-sm-10">
+                                             <img class="img-thumbnail" id="output" height="100" width="100"> 
+                                            <input type="file" name="image_url" id="image" accept="image/*" onchange="loadFile(event)">
+                                            <script>
+                                                var loadFile = function(event) {
+                                                    var image = document.getElementById('output');
+                                                    image.src = URL.createObjectURL(event.target.files[0]);
+                                                    $('#output').slideDown();
+                                                };
+                                            </script>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="offset-sm-2 col-sm-10">
+                                            <button type="submit" class="btn btn-danger">{{__('public.Save')}}</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@endsection
